@@ -1,57 +1,46 @@
-import React from "react";
+import React, { useCallback, useState } from 'react';
 import logo from "./logo.svg";
-import "./App.css";
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      input1: "",
-      input2: "",
-      show: false
-    };
-  }
+import { Container, Header } from './styles';
 
-  Login = () => {
-    const { show } = this.state;
-    this.setState({ show: !show });
-  };
+const App = () => {
+  const [show, setShow] = useState(false);
+  const [nome, setNome] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-  handleChange1 = e => {
-    this.setState({ input1: e.target.value });
-  };
+  const handleLogin = useCallback(() => {
+    setNome(email.split('@')[0]);
+    if (!!password)
+      setShow(true);
+  }, [email, password])
 
-  render() {
-    const { input1, show } = this.state;
-    const nome = input1.split("@");
-    return (
-      <div className="App">
-        {show ? (
-          <header className="App-header">
-            <img src={logo} className="App-logo" alt="logo" />
-            <h1>Bem vindo {nome[0]}</h1>
-          </header>
-        ) : (
-          <header className="App-header">
-            <img src={logo} className="App-logo" alt="logo" />
+
+  return (
+    <Container>
+      {show ? (
+        <Header>
+          <img src={logo} alt="logo" />
+          <h1>Bem vindo {nome}</h1>
+        </Header>
+      ) : (
+          <Header >
+            <img src={logo} alt="logo" />
             <input
-              className="App-input"
               name="email"
-              onChange={this.handleChange1}
+              onChange={e => setEmail(e.target.value)}
             />
             <input
-              className="App-input"
               type={"password"}
-              onChange={e => this.setState({ input2: e.value })}
+              onChange={e => setPassword(e.target.value)}
             />
-            <button className="App-link" onClick={this.Login}>
+            <button onClick={handleLogin}>
               Logar
-            </button>
-          </header>
+          </button>
+          </Header>
         )}
-      </div>
-    );
-  }
+    </Container>
+  );;
 }
 
 export default App;
